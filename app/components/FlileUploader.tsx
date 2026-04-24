@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { formatize } from "~/lib/format";
 import { useDropzone } from "react-dropzone";
 interface FileUploaderProps {
-  onFileSelect?: (file: File) => void;
+  onFileSelect?: (file: File | null) => void;
 }
 
 const FlileUploader = ({ onFileSelect }: FileUploaderProps) => {
@@ -29,16 +29,12 @@ const FlileUploader = ({ onFileSelect }: FileUploaderProps) => {
       <div {...getRootProps()}>
         <input {...getInputProps()} />
         <div className="space-y-4 cursor-pointer">
-          <div className="mx-auto w-16 h-16 flex items-center justify-center">
-            <img
-              src="/public/icons/info.svg"
-              alt="upload"
-              className="size-20"
-            />
-          </div>
+       
           {file ? (
-            <div className="flex items-center space-x-3">
-              <img src="/public/images/pdf.png" alt="pdf" className="size-10" />
+            <div className="uploader-selected-file" onClick={(e) => e.stopPropagation()}>
+               <img src="/public/images/pdf.png" alt="pdf" className="size-10" />
+              <div className="flex items-center space-x-3">
+             
               <div className="">
                 <p className="text-sm text-gray-700 font-medium truncate">
                   {file.name}
@@ -48,8 +44,22 @@ const FlileUploader = ({ onFileSelect }: FileUploaderProps) => {
                 <span className="text-gray-500">{formatize(file.size)}</span>
               </div>
             </div>
+            <button className="p-2 cursor-pointer" onClick={(e)=>{
+              onFileSelect?.(null);
+            }}>
+              <img src="/public/icons/cross.svg" alt="remove" className="w-4 h-4" />
+            </button>
+            </div>
+            
           ) : (
             <div className="">
+                 <div className="mx-auto w-16 h-16 flex items-center justify-center mb-2">
+            <img
+              src="/public/icons/info.svg"
+              alt="upload"
+              className="size-20"
+            />
+          </div>
               <p className="text-lg text-gray-500">
                 <span className="font-semibold">Click to upload</span> or drag
                 and drop
